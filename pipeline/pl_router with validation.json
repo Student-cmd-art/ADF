@@ -1,5 +1,5 @@
 {
-	"name": "pl_router",
+	"name": "pl_router with validation",
 	"properties": {
 		"activities": [
 			{
@@ -7,7 +7,7 @@
 				"type": "GetMetadata",
 				"dependsOn": [
 					{
-						"activity": "Validation1",
+						"activity": "Validation of locations csv",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -40,7 +40,7 @@
 				}
 			},
 			{
-				"name": "ForEach",
+				"name": "ForEach of Child Items",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -148,7 +148,7 @@
 										"value": "drivers",
 										"activities": [
 											{
-												"name": "Copy data1",
+												"name": "Copy Drivers",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {
@@ -221,7 +221,7 @@
 										"value": "trips",
 										"activities": [
 											{
-												"name": "Copy data2",
+												"name": "Copy Trips",
 												"type": "Copy",
 												"dependsOn": [],
 												"policy": {
@@ -297,7 +297,7 @@
 				}
 			},
 			{
-				"name": "Validation1",
+				"name": "Validation of locations csv",
 				"type": "Validation",
 				"dependsOn": [],
 				"userProperties": [],
@@ -316,11 +316,11 @@
 				}
 			},
 			{
-				"name": "Delete1",
+				"name": "Delete locations csv",
 				"type": "Delete",
 				"dependsOn": [
 					{
-						"activity": "ForEach",
+						"activity": "ForEach of Child Items",
 						"dependencyConditions": [
 							"Succeeded"
 						]
