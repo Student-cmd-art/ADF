@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Execute Pipeline1",
+				"name": "Execute Pipeline pl_CDC",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"policy": {
@@ -12,18 +12,22 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "lookup_pl",
+						"referenceName": "pl_CDC",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "SOURCE",
+						"table": "ORDERS"
+					}
 				}
 			},
 			{
-				"name": "If Condition1",
+				"name": "If Condition Success Or Failure",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Execute Pipeline1",
+						"activity": "Execute Pipeline pl_CDC",
 						"dependencyConditions": [
 							"Succeeded",
 							"Failed"
@@ -33,12 +37,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(activity('Execute Pipeline1').Status, 'Succeeded')",
+						"value": "@equals(activity('Execute Pipeline pl_CDC').Status, 'Succeeded')",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
 						{
-							"name": "Web3",
+							"name": "Send Failure Email",
 							"type": "WebActivity",
 							"dependsOn": [],
 							"policy": {
@@ -53,7 +57,7 @@
 								"method": "POST",
 								"url": "https://prod-21.northcentralus.logic.azure.com:443/workflows/5ca4833a91ad46a2bcd79251c0939746/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=D-6QjqCIseUdpubQYmVB9kiVv97J5opdd1BkU2fSnC4",
 								"body": {
-									"value": "{\n    \"SF\": \"@{activity('Execute Pipeline1').Status}\",\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"pipeline_runID\": \"@{pipeline().RunId}\"\n}",
+									"value": "{\n    \"SF\": \"@{activity('Execute Pipeline pl_CDC').Status}\",\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"pipeline_runID\": \"@{pipeline().RunId}\"\n}",
 									"type": "Expression"
 								}
 							}
@@ -61,7 +65,7 @@
 					],
 					"ifTrueActivities": [
 						{
-							"name": "Web2",
+							"name": "Send Success Email",
 							"type": "WebActivity",
 							"dependsOn": [],
 							"policy": {
@@ -76,7 +80,7 @@
 								"method": "POST",
 								"url": "https://prod-21.northcentralus.logic.azure.com:443/workflows/5ca4833a91ad46a2bcd79251c0939746/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=D-6QjqCIseUdpubQYmVB9kiVv97J5opdd1BkU2fSnC4",
 								"body": {
-									"value": "{\n    \"SF\": \"@{activity('Execute Pipeline1').Status}\",\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"pipeline_runID\": \"@{pipeline().RunId}\"\n}\n\n",
+									"value": "{\n    \"SF\": \"@{activity('Execute Pipeline pl_CDC').Status}\",\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"pipeline_runID\": \"@{pipeline().RunId}\"\n}\n\n",
 									"type": "Expression"
 								}
 							}

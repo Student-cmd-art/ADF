@@ -246,12 +246,10 @@
 		],
 		"parameters": {
 			"schema": {
-				"type": "string",
-				"defaultValue": "SOURCE"
+				"type": "string"
 			},
 			"table": {
-				"type": "string",
-				"defaultValue": "ORDER"
+				"type": "string"
 			},
 			"backdate": {
 				"type": "string"
