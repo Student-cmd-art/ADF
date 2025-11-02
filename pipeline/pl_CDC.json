@@ -1,9 +1,9 @@
 {
-	"name": "lookup_pl",
+	"name": "pl_CDC",
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup CDC Json",
+				"name": "Lookup CDC Timestamp",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -33,11 +33,11 @@
 				}
 			},
 			{
-				"name": "Total_Results",
+				"name": "Total Results Based on CDC or Backdate",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Lookup CDC Json",
+						"activity": "Lookup CDC Timestamp",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -60,7 +60,7 @@
 						{
 							"type": "Query",
 							"text": {
-								"value": "SELECT COUNT(*) AS TOTAL_COUNT\nFROM @{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE last_updated > '@{if(empty(pipeline().parameters.backdate), activity('Lookup CDC Json').output.firstRow['cdc_timestamp'], pipeline().parameters.backdate)}'\n",
+								"value": "SELECT COUNT(*) AS TOTAL_COUNT\nFROM @{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE last_updated > '@{if(empty(pipeline().parameters.backdate), activity('Lookup CDC Timestamp').output.firstRow['cdc_timestamp'], pipeline().parameters.backdate)}'\n",
 								"type": "Expression"
 							}
 						}
@@ -73,7 +73,7 @@
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Total_Results",
+						"activity": "Total Results Based on CDC or Backdate",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -82,12 +82,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greater(activity('Total_Results').output.resultSets[0].rows[0].TOTAL_COUNT, 0)",
+						"value": "@greater(activity('Total Results Based on CDC or Backdate').output.resultSets[0].rows[0].TOTAL_COUNT, 0)",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
 						{
-							"name": "Copy Data To Sink",
+							"name": "Copy Rows Data To Sink",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -102,7 +102,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "SELECT *\nFROM @{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE last_updated > '@{if(empty(pipeline().parameters.backdate), activity('Lookup CDC Json').output.firstRow['cdc_timestamp'], pipeline().parameters.backdate)}'\n",
+										"value": "SELECT *\nFROM @{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE last_updated > '@{if(empty(pipeline().parameters.backdate), activity('Lookup CDC Timestamp').output.firstRow['cdc_timestamp'], pipeline().parameters.backdate)}'\n",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -141,11 +141,11 @@
 							]
 						},
 						{
-							"name": "Update JSON",
+							"name": "Update CDC Timestamp",
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "MaxCDC",
+									"activity": "Calculate Max CDC From Data",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -166,7 +166,7 @@
 										{
 											"name": "cdc_timestamp",
 											"value": {
-												"value": "@activity('MaxCDC').output.resultSets[0].rows[0].cdc_timestamp",
+												"value": "@activity('Calculate Max CDC From Data').output.resultSets[0].rows[0].cdc_timestamp\n",
 												"type": "Expression"
 											}
 										}
@@ -205,11 +205,11 @@
 							]
 						},
 						{
-							"name": "MaxCDC",
+							"name": "Calculate Max CDC From Data",
 							"type": "Script",
 							"dependsOn": [
 								{
-									"activity": "Copy Data To Sink",
+									"activity": "Copy Rows Data To Sink",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -251,7 +251,7 @@
 			},
 			"table": {
 				"type": "string",
-				"defaultValue": "ORDE"
+				"defaultValue": "ORDER"
 			},
 			"backdate": {
 				"type": "string"
