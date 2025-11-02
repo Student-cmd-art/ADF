@@ -25,6 +25,8 @@
 			{
 				"name": "If Condition Success Or Failure",
 				"type": "IfCondition",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Execute Pipeline pl_CDC",
