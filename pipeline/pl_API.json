@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Pokemon",
+				"name": "Get Pokemon Data",
 				"type": "WebActivity",
 				"dependsOn": [],
 				"policy": {
@@ -20,11 +20,11 @@
 				}
 			},
 			{
-				"name": "Copy data1",
+				"name": "Copy Pokemon data with Offset",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "Set Count of Output",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -76,11 +76,11 @@
 				]
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set Count of Output",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Get Pokemon",
+						"activity": "Get Pokemon Data",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -94,7 +94,7 @@
 				"typeProperties": {
 					"variableName": "count",
 					"value": {
-						"value": "@activity('Get Pokemon').output.count",
+						"value": "@activity('Get Pokemon Data').output.count",
 						"type": "Expression"
 					}
 				}
