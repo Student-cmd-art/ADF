@@ -1,0 +1,13 @@
+{
+	"name": "ds_pokemon",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_pokemon",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

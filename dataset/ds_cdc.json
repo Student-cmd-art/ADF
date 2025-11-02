@@ -1,0 +1,21 @@
+{
+	"name": "ds_cdc",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SECONDSTORAGEACCOUNT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "cdc.json",
+				"folderPath": "monitor",
+				"fileSystem": "source"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

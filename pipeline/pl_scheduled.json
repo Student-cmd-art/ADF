@@ -1,0 +1,92 @@
+{
+	"name": "pl_scheduled",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "lookup_pl",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Succeeded",
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(activity('Execute Pipeline1').Status, 'Succeeded')",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Web3",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"method": "POST",
+								"url": "https://prod-21.northcentralus.logic.azure.com:443/workflows/5ca4833a91ad46a2bcd79251c0939746/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=D-6QjqCIseUdpubQYmVB9kiVv97J5opdd1BkU2fSnC4",
+								"body": {
+									"value": "{\n    \"SF\": \"@{activity('Execute Pipeline1').Status}\",\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"pipeline_runID\": \"@{pipeline().RunId}\"\n}",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Web2",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"method": "POST",
+								"url": "https://prod-21.northcentralus.logic.azure.com:443/workflows/5ca4833a91ad46a2bcd79251c0939746/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=D-6QjqCIseUdpubQYmVB9kiVv97J5opdd1BkU2fSnC4",
+								"body": {
+									"value": "{\n    \"SF\": \"@{activity('Execute Pipeline1').Status}\",\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"pipeline_runID\": \"@{pipeline().RunId}\"\n}\n\n",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2025-10-31T14:55:06Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

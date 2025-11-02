@@ -1,0 +1,24 @@
+{
+	"name": "ScheduledTrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_scheduled",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2025-10-31T13:50:00",
+				"timeZone": "GMT Standard Time"
+			}
+		}
+	}
+}
