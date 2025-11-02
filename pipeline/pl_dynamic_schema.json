@@ -1,9 +1,9 @@
 {
-	"name": "pl_schema",
+	"name": "pl_dynamic_schema",
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Metadata1",
+				"name": "Get Metadata Of Files",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -37,7 +37,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata1",
+						"activity": "Get Metadata Of Files",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -51,7 +51,7 @@
 					},
 					"activities": [
 						{
-							"name": "Copy data1",
+							"name": "Copy Data with Dynmaic Schema",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
