@@ -208,3 +208,68 @@ This pattern removes the need for hard-coded file paths
 This allows the same ds_csv to handle multiple files and folders dynamically.
 
 ---
+
+## Pipeline 4: Dynamic Schema Mapping for Multiple CSV Files
+
+### Overview
+It dynamically applies mappings for different CSV files using **pipeline parameters** that hold schema definitions.  
+Instead of creating multiple copy activities for each file type, one pipeline automatically adapts based on file name and the schema parameter passed in.
+
+---
+
+### Pipeline Components
+
+#### `pl_dynamic_schema`
+**Key steps**
+
+1. **Get Metadata of Files**  
+   - Retrieves all file names within the `source/files` directory using the `ds_csvs` dataset.  
+   - Produces an array of files to loop through.
+
+2. **ForEachFile**  
+   - Iterates through each file detected in the source folder.  
+   - Runs a **Copy Data** activity for each one.
+
+3. **Copy Data with Dynamic Schema**  
+   - Reads from the parameterized dataset `ds_csv` and writes to the `sink/schema` folder.  
+   - Dynamically selects the correct mapping based on file name using the following expression:
+     ```text
+     @if(
+       equals(item().name, 'customers.csv'),
+       pipeline().parameters.customer_sc,
+       if(
+         equals(item().name, 'drivers.csv'),
+         pipeline().parameters.drivers_sc,
+         if(
+           equals(item().name, 'trips.csv'),
+           pipeline().parameters.trips_sc,
+           ''
+         )
+       )
+     )
+     ```
+   - This logic automatically applies the proper translator for each file’s schema.  
+---
+
+### Parameters
+The pipeline defines three **object parameters**, each containing a **Tabular Translator** mapping:
+
+| Parameter | Description |
+|------------|-------------|
+| `customer_sc` | Schema mapping for `customers.csv` |
+| `drivers_sc`  | Schema mapping for `drivers.csv`  |
+| `trips_sc`    | Schema mapping for `trips.csv`    |
+
+Each translator object maps source columns to different sink columns  
+
+---
+
+### Datasets
+
+| Dataset | Type | Description |
+|----------|------|-------------|
+| `ds_csv` | Delimited Text (with parameters) | Parameterized dataset for both source and sink CSVs |
+| `ds_csvs` | Delimited Text | Static dataset used for the Get Metadata activity |
+
+
+---
