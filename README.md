@@ -134,4 +134,77 @@ Implements the main extraction logic using three key activities:
 
 ---
 
+## Pipeline 3: Dynamic CSV Router with File Validation
 
+### Overview
+It automatically validates trigger files, lists all CSVs in a folder, routes them to the correct processing logic based on file name, and then performs cleanup once processing is complete.
+
+This pattern removes the need for hard-coded file paths
+
+---
+
+### Pipeline Components
+
+#### `pl_router with validation`
+
+<img width="1057" height="260" alt="Screenshot 2025-11-03 at 10 29 20 AM" src="https://github.com/user-attachments/assets/1601f3f9-b296-4cfb-8cdc-e0bd5382684c" />
+
+**Key steps**
+
+1. **Validation of locations csv**  
+   - Uses a **Validation Activity** to confirm that `locations.csv` exists in the trigger folder before processing.  
+   - Acts as a simple “ready flag” file to start ingestion.
+
+2. **Get Metadata of Files**  
+   - Lists all child items within the `source/files` container using a **Get Metadata Activity**.  
+   - Outputs an array of filenames.
+
+3. **ForEach of Child Items**  
+   - Iterates through each file returned from the metadata step.
+
+4. **Switch By Name**  
+   - Reads the file name (before the extension) and dynamically routes it to the correct copy logic.  
+   - **Cases implemented:**  
+     - `customers` → `Copy Customers`  
+     - `drivers` → `Copy Drivers`  
+     - `trips` → `Copy Trips`
+
+5. **Copy Activities**  
+   - Each case runs a **Copy Data** activity that:  
+     - Reads from the `source/files` path  
+     - Writes the file to the `sink/files` folder  
+     - Uses the parameterized dataset `ds_csv` for flexibility
+     
+<img width="1311" height="213" alt="Screenshot 2025-11-03 at 10 30 35 AM" src="https://github.com/user-attachments/assets/c157f563-e4f3-47dd-a67d-2838f8c2ed71" />
+
+6. **Delete locations csv**  
+   - Removes the trigger file once all copies have succeeded
+
+---
+
+### Linked Services
+
+| Name | Type | Purpose |
+|------|------|----------|
+| `LS_SECONDSTORAGEACCOUNT` | ADLS Gen2 | Storage for both input and output CSV files |
+
+---
+
+### Datasets
+
+| Dataset | Type | Description |
+|----------|------|-------------|
+| `ds_csvs` | Delimited Text | Static dataset used by Get Metadata to list available CSV files |
+| `ds_csv`  | Delimited Text (with parameters) | Parameterized dataset used for both source and sink files |
+
+**`ds_csv` Parameters**
+
+| Parameter | Description |
+|------------|-------------|
+| `p_container` | File system name (e.g. `source` or `sink`) |
+| `p_folder`    | Folder path |
+| `p_file`      | File name (passed dynamically from the ForEach loop) - @item().name |
+
+This allows the same ds_csv to handle multiple files and folders dynamically.
+
+---
