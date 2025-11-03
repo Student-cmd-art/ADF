@@ -20,17 +20,17 @@ Handles the incremental data extraction and CDC logic.
 
 **Key steps:**
 - **Lookup CDC Timestamp**  
-  Reads the most recent `cdc_timestamp` from a JSON file stored in ADLS (e.g., `source/monitor/cdc.json`).
-- **Query Source Data**  
+  Reads the most recent `cdc_timestamp` from a JSON file stored in ADLS (e.g., `source/monitor/cdc_timestamp.json`).
+- **Script to Query Source Data**  
   Uses the timestamp to filter rows from the SQL table where `last_updated > cdc_timestamp`.
 - **IfCondition check**  
   Proceeds only if new rows are found (`TOTAL_COUNT > 0`).
 - **Copy Data Activity**  
   Extracts qualifying rows from SQL and writes them as Parquet files to `sink/orders/` in ADLS.
-- **Calculate Max CDC**  
+- **Script to Calculate Max CDC**  
   Determines the latest timestamp from the new data (`MAX(last_updated)`).
-- **Update CDC File**  
-  Overwrites the `cdc.json` file with the new timestamp for the next run.
+- **Copy Acticity to Update CDC File**  
+  Overwrites the `cdc_timestamp.json` file with the new timestamp for the next run.
 
 **Parameters:**
 
@@ -77,10 +77,61 @@ All credentials and connection details are redacted. In a production setup, thes
 
 ---
 
-## How It Works (Simplified Flow)
+## Pipeline 2: REST API Data Extraction (Pokémon API)
 
-1. `Lookup CDC Timestamp` → get last processed timestamp  
-2. `Query SQL table` for rows where `last_updated` is newer  
-3. If new data found → copy to ADLS as Parquet  
-4. Calculate and update new `cdc_timestamp`  
-5. Scheduler pipeline (`pl_scheduled`) triggers emails on success/failure  
+### Overview
+The **second pipeline** in this series demonstrates how to extract data from a **public REST API**, handle **pagination dynamically**, and store the output as JSON files in **Azure Data Lake Storage Gen2**.
+
+It connects to the **PokéAPI** (a public dataset for Pokémon information) to fetch data in batches using an offset-based pagination rule.
+
+---
+
+### Pipeline Components
+
+#### `pl_API`
+Implements the main extraction logic using three key activities:
+
+<img width="809" height="163" alt="Screenshot 2025-11-03 at 10 17 17 AM" src="https://github.com/user-attachments/assets/a41c2f1d-5766-4355-a6f1-84e69262181b" />
+
+
+**1. Get Pokemon Data**  
+- A **Web Activity** sends a GET request to the PokéAPI endpoint to fetch the total number of Pokémon (`count`).  
+- Example API call: `https://pokeapi.co/api/v2/pokemon`
+
+**2. Set Count of Output**  
+- Stores the total record count in a pipeline variable named `count`.  
+- This value is later used for pagination for fetching all records.
+
+**3. Copy Pokemon Data with Offset**  
+- A **Copy Data** activity that uses `RestSource` with pagination rules.  
+- The `QueryParameters.{offset}` property is dynamically generated using:
+  ```text
+  RANGE:0:@{variables('count')}:20
+ which loops through all records in increments of 20.
+- Each API call fetches a batch of Pokémon data and writes it to ADLS as JSON.
+
+- Note: you can also use the AbsoluteURL on the next value in the response body for pagination
+  
+<img width="1115" height="463" alt="Screenshot 2025-11-03 at 10 17 50 AM" src="https://github.com/user-attachments/assets/61f42868-f17f-40cf-8cca-33ab1a056df6" />
+
+---
+
+## Linked Services
+
+| Name                      | Type                 | Purpose                                         |
+|----------------------------|----------------------|-------------------------------------------------|
+| `ls_pokemon`        | REST Service   | Connects to the public PokéAPI endpoint              |
+| `LS_SECONDSTORAGEACCOUNT`  | Azure Data Lake Gen2 | Storage for input/output JSONs |
+
+---
+
+## Datasets
+
+| Dataset        | Type    | Description                                    |
+|----------------|---------|------------------------------------------------|
+| `ds_pokemon`      | REST Resource    | Represents the source API resource                  |
+| `ds_json`       | JSON    | Output dataset storing results in ADLS   |
+
+---
+
+
