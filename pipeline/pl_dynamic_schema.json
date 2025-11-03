@@ -129,98 +129,66 @@
 					"mappings": [
 						{
 							"source": {
-								"name": "customer_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "customer_id"
 							},
 							"sink": {
-								"name": "customer_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "cust_id"
 							}
 						},
 						{
 							"source": {
-								"name": "first_name",
-								"type": "String",
-								"physicalType": "String"
+								"name": "first_name"
 							},
 							"sink": {
-								"name": "first_name",
-								"type": "String",
-								"physicalType": "String"
+								"name": "fname"
 							}
 						},
 						{
 							"source": {
-								"name": "last_name",
-								"type": "String",
-								"physicalType": "String"
+								"name": "last_name"
 							},
 							"sink": {
-								"name": "last_name",
-								"type": "String",
-								"physicalType": "String"
+								"name": "lname"
 							}
 						},
 						{
 							"source": {
-								"name": "email",
-								"type": "String",
-								"physicalType": "String"
+								"name": "email"
 							},
 							"sink": {
-								"name": "email",
-								"type": "String",
-								"physicalType": "String"
+								"name": "contact_email"
 							}
 						},
 						{
 							"source": {
-								"name": "phone_number",
-								"type": "String",
-								"physicalType": "String"
+								"name": "phone_number"
 							},
 							"sink": {
-								"name": "phone_number",
-								"type": "String",
-								"physicalType": "String"
+								"name": "mobile_no"
 							}
 						},
 						{
 							"source": {
-								"name": "city",
-								"type": "String",
-								"physicalType": "String"
+								"name": "city"
 							},
 							"sink": {
-								"name": "city",
-								"type": "String",
-								"physicalType": "String"
+								"name": "customer_city"
 							}
 						},
 						{
 							"source": {
-								"name": "signup_date",
-								"type": "String",
-								"physicalType": "String"
+								"name": "signup_date"
 							},
 							"sink": {
-								"name": "signup_date",
-								"type": "String",
-								"physicalType": "String"
+								"name": "registered_on"
 							}
 						},
 						{
 							"source": {
-								"name": "last_updated_timestamp",
-								"type": "String",
-								"physicalType": "String"
+								"name": "last_updated_timestamp"
 							},
 							"sink": {
-								"name": "last_updated_timestamp",
-								"type": "String",
-								"physicalType": "String"
+								"name": "updated_at"
 							}
 						}
 					],
@@ -238,98 +206,66 @@
 					"mappings": [
 						{
 							"source": {
-								"name": "driver_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "driver_id"
 							},
 							"sink": {
-								"name": "driver_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "drv_id"
 							}
 						},
 						{
 							"source": {
-								"name": "first_name",
-								"type": "String",
-								"physicalType": "String"
+								"name": "first_name"
 							},
 							"sink": {
-								"name": "first_name",
-								"type": "String",
-								"physicalType": "String"
+								"name": "drv_fname"
 							}
 						},
 						{
 							"source": {
-								"name": "last_name",
-								"type": "String",
-								"physicalType": "String"
+								"name": "last_name"
 							},
 							"sink": {
-								"name": "last_name",
-								"type": "String",
-								"physicalType": "String"
+								"name": "drv_lname"
 							}
 						},
 						{
 							"source": {
-								"name": "phone_number",
-								"type": "String",
-								"physicalType": "String"
+								"name": "phone_number"
 							},
 							"sink": {
-								"name": "phone_number",
-								"type": "String",
-								"physicalType": "String"
+								"name": "drv_contact"
 							}
 						},
 						{
 							"source": {
-								"name": "vehicle_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "vehicle_id"
 							},
 							"sink": {
-								"name": "vehicle_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "vehicle_code"
 							}
 						},
 						{
 							"source": {
-								"name": "driver_rating",
-								"type": "String",
-								"physicalType": "String"
+								"name": "driver_rating"
 							},
 							"sink": {
-								"name": "driver_rating",
-								"type": "String",
-								"physicalType": "String"
+								"name": "avg_rating"
 							}
 						},
 						{
 							"source": {
-								"name": "city",
-								"type": "String",
-								"physicalType": "String"
+								"name": "city"
 							},
 							"sink": {
-								"name": "city",
-								"type": "String",
-								"physicalType": "String"
+								"name": "operating_city"
 							}
 						},
 						{
 							"source": {
-								"name": "last_updated_timestamp",
-								"type": "String",
-								"physicalType": "String"
+								"name": "last_updated_timestamp"
 							},
 							"sink": {
-								"name": "last_updated_timestamp",
-								"type": "String",
-								"physicalType": "String"
+								"name": "modified_on"
 							}
 						}
 					],
@@ -347,158 +283,106 @@
 					"mappings": [
 						{
 							"source": {
-								"name": "trip_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "trip_id"
 							},
 							"sink": {
-								"name": "trip_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "journey_id"
 							}
 						},
 						{
 							"source": {
-								"name": "driver_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "driver_id"
 							},
 							"sink": {
-								"name": "driver_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "drv_id"
 							}
 						},
 						{
 							"source": {
-								"name": "customer_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "customer_id"
 							},
 							"sink": {
-								"name": "customer_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "cust_id"
 							}
 						},
 						{
 							"source": {
-								"name": "vehicle_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "vehicle_id"
 							},
 							"sink": {
-								"name": "vehicle_id",
-								"type": "String",
-								"physicalType": "String"
+								"name": "vehicle_ref"
 							}
 						},
 						{
 							"source": {
-								"name": "trip_start_time",
-								"type": "String",
-								"physicalType": "String"
+								"name": "trip_start_time"
 							},
 							"sink": {
-								"name": "trip_start_time",
-								"type": "String",
-								"physicalType": "String"
+								"name": "start_time"
 							}
 						},
 						{
 							"source": {
-								"name": "trip_end_time",
-								"type": "String",
-								"physicalType": "String"
+								"name": "trip_end_time"
 							},
 							"sink": {
-								"name": "trip_end_time",
-								"type": "String",
-								"physicalType": "String"
+								"name": "end_time"
 							}
 						},
 						{
 							"source": {
-								"name": "start_location",
-								"type": "String",
-								"physicalType": "String"
+								"name": "start_location"
 							},
 							"sink": {
-								"name": "start_location",
-								"type": "String",
-								"physicalType": "String"
+								"name": "origin"
 							}
 						},
 						{
 							"source": {
-								"name": "end_location",
-								"type": "String",
-								"physicalType": "String"
+								"name": "end_location"
 							},
 							"sink": {
-								"name": "end_location",
-								"type": "String",
-								"physicalType": "String"
+								"name": "destination"
 							}
 						},
 						{
 							"source": {
-								"name": "distance_km",
-								"type": "String",
-								"physicalType": "String"
+								"name": "distance_km"
 							},
 							"sink": {
-								"name": "distance_km",
-								"type": "String",
-								"physicalType": "String"
+								"name": "distance"
 							}
 						},
 						{
 							"source": {
-								"name": "fare_amount",
-								"type": "String",
-								"physicalType": "String"
+								"name": "fare_amount"
 							},
 							"sink": {
-								"name": "fare_amount",
-								"type": "String",
-								"physicalType": "String"
+								"name": "fare_total"
 							}
 						},
 						{
 							"source": {
-								"name": "payment_method",
-								"type": "String",
-								"physicalType": "String"
+								"name": "payment_method"
 							},
 							"sink": {
-								"name": "payment_method",
-								"type": "String",
-								"physicalType": "String"
+								"name": "pay_type"
 							}
 						},
 						{
 							"source": {
-								"name": "trip_status",
-								"type": "String",
-								"physicalType": "String"
+								"name": "trip_status"
 							},
 							"sink": {
-								"name": "trip_status",
-								"type": "String",
-								"physicalType": "String"
+								"name": "status"
 							}
 						},
 						{
 							"source": {
-								"name": "last_updated_timestamp",
-								"type": "String",
-								"physicalType": "String"
+								"name": "last_updated_timestamp"
 							},
 							"sink": {
-								"name": "last_updated_timestamp",
-								"type": "String",
-								"physicalType": "String"
+								"name": "updated_at"
 							}
 						}
 					],
